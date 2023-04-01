@@ -5,6 +5,7 @@ import com.example.springboottrainning.repository.PedidosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
@@ -14,10 +15,9 @@ public class Controller {
     @Autowired
     FeignController feignController;
 
-    @GetMapping
-    public String hello(){
-        PedidosRepository value = feignController.getPedido();
-        return value.toString();
+    @GetMapping("/test/{id}")
+    public PedidosRepository hello(@PathVariable String id){
+        PedidosRepository daddosDoPedido = feignController.getPedido(id);
+        return daddosDoPedido;
     }
-
 }

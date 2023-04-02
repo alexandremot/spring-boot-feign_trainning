@@ -1,23 +1,32 @@
 package com.example.springboottrainning.controller;
 
-import com.example.springboottrainning.feign_client.FeignController;
+import com.example.springboottrainning.feign_client.FeignClient;
+import com.example.springboottrainning.lab.PedidosBuilder;
 import com.example.springboottrainning.repository.PedidosRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping
 public class Controller {
 
     @Autowired
-    FeignController feignController;
+    FeignClient feignClient;
 
-    @GetMapping("/test/{id}")
-    public PedidosRepository hello(@PathVariable String id){
-        PedidosRepository daddosDoPedido = feignController.getPedido(id);
+    @Autowired
+    PedidosBuilder pedidosBuilder;
+
+
+    @GetMapping("/consultapedido/{id}")
+    public PedidosRepository getPedidoPorId(@PathVariable String id) {
+        PedidosRepository daddosDoPedido = feignClient.getPedido(id);
         return daddosDoPedido;
+    }
+
+    @PostMapping("/enviapedido")
+    public String postPedido() throws JsonProcessingException {
+        String pedidoJson = pedidosBuilder.montaJsonPedido();
+        return feignClient.postPedido(pedidoJson);
     }
 }

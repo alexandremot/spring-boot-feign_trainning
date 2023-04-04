@@ -2,8 +2,9 @@ package com.example.springboottrainning.controller;
 
 import com.example.springboottrainning.feign_client.FeignClient;
 import com.example.springboottrainning.lab.PedidosBuilder;
-import com.example.springboottrainning.repository.PedidosRepository;
+import com.example.springboottrainning.entity.AnimeEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import feign.Headers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,10 @@ public class Controller {
     @Autowired
     PedidosBuilder pedidosBuilder;
 
-
-    @GetMapping("/consultapedido/{id}")
-    public PedidosRepository getPedidoPorId(@PathVariable String id) {
-        PedidosRepository daddosDoPedido = feignClient.getPedido(id);
-        return daddosDoPedido;
+    @GetMapping("/animes/{id}")
+    public AnimeEntity getAnimePorId(@RequestHeader(value = "param", required = true) String headerParam, @PathVariable String id) {
+        AnimeEntity dadosAnime = feignClient.getAnime(headerParam, id);
+        return dadosAnime;
     }
 
     @PostMapping("/enviapedido")
